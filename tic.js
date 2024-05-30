@@ -2,14 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameBoard = document.getElementById('gameBoard');
     const cells = document.querySelectorAll('.cell');
     const resetButton = document.getElementById('resetButton');
+    const nameContainer = document.getElementById('nameContainer');
+    const playerNameInput = document.getElementById('playerName');
+    const submitNameButton = document.getElementById('submitName');
     const choiceContainer = document.getElementById('choiceContainer');
     const chooseX = document.getElementById('chooseX');
     const chooseO = document.getElementById('chooseO');
     const scoreContainer = document.getElementById('scoreContainer');
+    const playerLabel = document.getElementById('playerLabel');
     const playerScoreElem = document.getElementById('playerScore');
     const computerScoreElem = document.getElementById('computerScore');
     const drawsElem = document.getElementById('draws');
 
+    let playerName = '';
     let currentPlayer = 'X';
     let playerMarker = 'X';
     let computerMarker = 'O';
@@ -44,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentPlayer = computerMarker;
         if (gameActive) {
-            computerMove();
+            setTimeout(computerMove, 500);
         }
     };
 
@@ -71,7 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (roundWon) {
-            setTimeout(() => alert(`Player ${currentPlayer} wins!`), 100);
+            const winner = currentPlayer === playerMarker ? playerName : 'Computer';
+            setTimeout(() => alert(`${winner} wins!`), 100);
             gameActive = false;
             updateScore(currentPlayer);
             return;
@@ -116,9 +122,20 @@ document.addEventListener('DOMContentLoaded', () => {
         resetButton.style.display = 'inline-block';
 
         if (computerMarker === 'X') {
-            computerMove();
+            setTimeout(computerMove, 500);
         }
     };
+
+    submitNameButton.addEventListener('click', () => {
+        playerName = playerNameInput.value.trim();
+        if (playerName) {
+            playerLabel.textContent = playerName;
+            nameContainer.style.display = 'none';
+            choiceContainer.style.display = 'block';
+        } else {
+            alert('Please enter your name.');
+        }
+    });
 
     chooseX.addEventListener('click', () => startGame('X'));
     chooseO.addEventListener('click', () => startGame('O'));
@@ -131,4 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
         gameBoard.style.display = 'none';
         resetButton.style.display = 'none';
     });
+
+    // Add Bubbles
+    const colors = ['blue', 'rose', 'purple'];
+    for (let i = 0; i < 15; i++) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble', colors[Math.floor(Math.random() * colors.length)]);
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.animationDuration = `${Math.random() * 7 + 5}s`; // Between 5s and 12s
+        bubble.style.width = `${Math.random() * 20 + 20}px`; // Between 20px and 40px
+        bubble.style.height = bubble.style.width;
+        document.body.appendChild(bubble);
+    }
 });
